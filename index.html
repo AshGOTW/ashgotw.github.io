@@ -29,19 +29,25 @@
 </div>
 
 <script>
-    // Replace with your YouTube Channel ID (starts with UC...)
+    // Fixed to use your actual Channel ID and the official YouTube XML feed URL
     const channelId = "UCKBnS2yzJ3-Xe0pwcz4rguQ";
-    const rssUrl = `https://www.youtube.com/@Ash_G_OTW/shorts`;
+    const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
     const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
 
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            if (data.items && data.items.length > 0) {
+            if (data.status === "ok" && data.items && data.items.length > 0) {
                 // Grabs the most recent video (index 0)
                 const latestVideo = data.items[0];
-                const videoId = latestVideo.link.split("=")[1];
-                document.getElementById("latest-video").src = `https://www.youtube.com/embed/${videoId}`;
+                const urlParams = new URLSearchParams(new URL(latestVideo.link).search);
+                const videoId = urlParams.get("v");
+                
+                if (videoId) {
+                    document.getElementById("latest-video").src = `https://www.youtube.com/embed/${videoId}`;
+                }
+            } else {
+                console.error("RSS feed error or no items found:", data);
             }
         })
         .catch(error => console.error("Error loading feed:", error));
