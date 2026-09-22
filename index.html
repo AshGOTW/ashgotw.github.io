@@ -21,7 +21,30 @@
         <a href="https://streamelements.com/ash_g_otw/tip" target="_blank">Tip Ash Through StreamElements</a>
         <a href="https://ash-g-otw-shop.fourthwall.com" target="_blank">Fourthwall Merch Store</a>
         <a href="https://bsky.app/profile/ashgotw.bsky.social" target="_blank">Blue Sky</a>
+        <a href="https://www.instagram.com/ash_g_otw" target="_blank">Instagram</a>
         <a href="mailto:ashgotw@example.com">Email Me</a>
     </div>
+    <div class="video-carousel" id="recent-video-container">
+    <iframe id="latest-video" src="" title="Latest YouTube Video" allowfullscreen></iframe>
+</div>
+
+<script>
+    // Replace with your YouTube Channel ID (starts with UC...)
+    const channelId = "Ash_G_OTW";
+    const rssUrl = `https://www.youtube.com/@Ash_G_OTW/shorts`;
+    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            if (data.items && data.items.length > 0) {
+                // Grabs the most recent video (index 0)
+                const latestVideo = data.items[0];
+                const videoId = latestVideo.link.split("=")[1];
+                document.getElementById("latest-video").src = `https://www.youtube.com/embed/${videoId}`;
+            }
+        })
+        .catch(error => console.error("Error loading feed:", error));
+</script>
 </body>
 </html>
