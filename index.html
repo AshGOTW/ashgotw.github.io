@@ -6,44 +6,71 @@
     <title>Ash_G_OTW Links</title>
     <style>
         body { font-family: sans-serif; background: #121212; color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px 0; }
-        .container { text-align: center; width: 100%; max-width: 400px; padding: 20px; }
+        .container { text-align: center; width: 100%; max-width: 400px; padding: 20px; box-sizing: border-box; }
         
-        /* Optional styling for your images */
-        .profile-img { width:400px; height: 80px; border-radius: 8px; object-fit: cover; margin-bottom: 10px; border: 2px solid #3a3a3a; }
-        .profile-img2 { width: 360px; height: 200px; border-radius: 8px; object-fit: cover; margin-bottom: 10px; border: 2px solid #3a3a3a; }
-        .profile-img3 { width: 340px; height: 200px; border-radius: 8px; object-fit: cover; margin-bottom: 10px; border: 2px solid #3a3a3a; }
-        .footer-img { width: 100%; max-width: 250px; border-radius: 8px; margin-top: 15px; }
+        .profile-img { width: 350px; height: 80px; border-radius: 8px; object-fit: cover; margin: 0 auto 10px auto; border: 2px solid #3a3a3a; display: block; box-sizing: border-box; }
+        .profile-img2 { width: 350px; height: 225px; border-radius: 8px; object-fit: cover; margin: 0 auto 10px auto; border: 2px solid #3a3a3a; display: block; box-sizing: border-box; }
+        .footer-img { width: 100%; max-width: 250px; height: auto; border-radius: 8px; margin-top: 15px; display: inline-block; }
 
         h2 { margin-bottom: 20px; }
-        a { display: block; background: #2a2a2a; color: #fff; padding: 15px; margin: 12px 0; text-decoration: none; border-radius: 8px; font-weight: bold; transition: background 0.2s; }
+        
+        /* Standard link buttons */
+        a { display: block; background: #2a2a2a; color: #fff; padding: 15px; margin: 12px 0; text-decoration: none; border-radius: 8px; font-weight: bold; transition: background 0.2s; box-sizing: border-box; position: relative; }
         a:hover { background: #3a3a3a; }
 
-        .video-container { width: 100%; max-width: 400px; padding: 0 20px; margin-top: 20px; }
+        /* Live Badge Styling (Hidden by default) */
+        .live-badge {
+            display: none;
+            background-color: #ff0000;
+            color: white;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        .image-link { display: block; width: fit-content; margin: 0 auto; text-decoration: none; }
+
+        .video-container { width: 100%; max-width: 400px; padding: 0 20px; margin-top: 20px; box-sizing: border-box; }
         .video-container iframe { width: 100%; height: 225px; border: none; border-radius: 8px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- First Image (e.g., Logo or Avatar) -->
+        <!-- First Image (Banner) -->
         <img src="Ash Banner.png" alt="Ash_G_OTW Logo" class="profile-img">
 
-<!-- Second Image Wrapped in a Link to Twitch -->
-        <a href="https://twitch.tv/ash_g_otw" target="_blank" class="profile-img2">
-            <img src="Live Times - Very General.jpg" alt="Live times" class="profile-img3">
+        <!-- Second Image Wrapped in a Link to Twitch -->
+        <a href="https://twitch.tv/ash_g_otw" target="_blank" class="image-link">
+            <img src="Live Times - Very General.jpg" alt="Live times" class="profile-img2">
         </a>
         
         <h2>Ash_G_OTW Links</h2>
-        <a href="https://twitch.tv/ash_g_otw" target="_blank">Twitch</a>
+        
+        <!-- Twitch Button with Live Badge -->
+        <a href="https://twitch.tv/ash_g_otw" target="_blank" id="twitch-btn">
+            Twitch <span id="live-indicator" class="live-badge">LIVE NOW</span>
+        </a>
+
         <a href="https://youtube.com/@Ash_G_OTW" target="_blank">YouTube</a>
         <a href="https://x.com/Ash_G_OTW" target="_blank">X / Twitter</a>
         <a href="https://streamelements.com/ash_g_otw/tip" target="_blank">Tip Ash Through StreamElements</a>
-        <a href="https://ash-g-otw-shop.fourthwall.com" target="_blank">Fourthwall Merch Store</a>
+        <a href="https://ash-g_otw-shop.fourthwall.com" target="_blank">Fourthwall Merch Store</a>
         <a href="https://bsky.app/profile/ashgotw.bsky.social" target="_blank">Blue Sky</a>
         <a href="https://www.instagram.com/ash_g_otw" target="_blank">Instagram</a>
-        <a href="https://www.tiktok.com/@ash_g_otw" target="_blank">TikTok</a>
         <a href="mailto:ashgotw@gmail.com">Email Me</a>
 
-        <!-- Second Image (e.g., Banner or Footer Graphic) -->
+        <!-- Third Image (QR Code) -->
         <img src="Ash_G_OTW Twitch Channel QR Code (Purple).png" alt="Featured Graphic" class="footer-img">
     </div>
 
@@ -55,6 +82,32 @@
                 allowfullscreen>
         </iframe>
     </div>
+
+    <!-- Script to check if you are live -->
+    <script>
+        async function checkTwitchStatus() {
+            try {
+                // Using Decapi to check stream status cleanly without exposing secret keys client-side
+                const response = await fetch('https://decapi.me/twitch/uptime/ash_g_otw');
+                const text = await response.text();
+                
+                const badge = document.getElementById('live-indicator');
+                
+                // If decapi returns something other than offline text, stream is live
+                if (text && !text.includes('offline') && !text.includes('does not exist')) {
+                    badge.style.display = 'inline-block';
+                } else {
+                    badge.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error checking stream status:', error);
+            }
+        }
+
+        // Check immediately on load, then every 60 seconds
+        checkTwitchStatus();
+        setInterval(checkTwitchStatus, 60000);
+    </script>
      
 </body>
 </html>
