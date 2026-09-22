@@ -28,29 +28,14 @@
     <iframe id="latest-video" src="" title="Latest YouTube Video" allowfullscreen></iframe>
 </div>
 
-<script>
-    // Fixed to use your actual Channel ID and the official YouTube XML feed URL
-    const channelId = "UCKBnS2yzJ3-Xe0pwcz4rguQ";
-    const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
-    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
-
-    fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === "ok" && data.items && data.items.length > 0) {
-                // Grabs the most recent video (index 0)
-                const latestVideo = data.items[0];
-                const urlParams = new URLSearchParams(new URL(latestVideo.link).search);
-                const videoId = urlParams.get("v");
-                
-                if (videoId) {
-                    document.getElementById("latest-video").src = `https://www.youtube.com/embed/${videoId}`;
-                }
-            } else {
-                console.error("RSS feed error or no items found:", data);
-            }
-        })
-        .catch(error => console.error("Error loading feed:", error));
-</script>
+<!-- Embedded YouTube Uploads Playlist Player -->
+    <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/videoseries?list=UUKBnS2yzJ3-Xe0pwcz4rguQ" 
+                title="Ash_G_OTW Recent Videos" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+        </iframe>
+    </div>
+    
 </body>
 </html>
